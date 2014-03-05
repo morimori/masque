@@ -18,10 +18,11 @@ class Masque
     end
 
     def driver_name
-      case driver
-      when ::Capybara::Driver::Webkit, ::Capybara::Webkit::Driver
+      p driver.methods.sort
+      case driver.class.to_s
+      when 'Capybara::Driver::Webkit', 'Capybara::Webkit::Driver'
         :webkit
-      when ::Capybara::Poltergeist::Driver
+      when 'Capybara::Poltergeist::Driver'
         :poltergeist
       else
         :unknown

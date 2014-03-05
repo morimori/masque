@@ -1,8 +1,5 @@
 require "capybara"
 require "capybara/dsl"
-require "capybara/webkit"
-require 'capybara/poltergeist'
-require "headless"
 require "masque/version"
 require "masque/dsl"
 
@@ -16,6 +13,7 @@ class Masque
   def initialize(options = {})
     @options = options
     @driver = options[:driver] || :webkit
+    require "capybara/#{@driver}"
 
     case options[:capybara_compat]
     when "2.1"
@@ -47,6 +45,7 @@ class Masque
     end.new(Capybara::Session.new(@driver))
 
     if @driver == :webkit
+      require 'headless'
       h = Headless.new(options.merge(:destroy_at_exit => false, :reuse => true))
       h.start
       ObjectSpace.define_finalizer(@agent.driver.browser.instance_variable_get(:@connection)) do
